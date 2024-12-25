@@ -5,7 +5,11 @@ const router = require("./routes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://gowallet.onrender.com", "http://localhost:3000"],
+  })
+);
 
 app.use(express.json());
 
