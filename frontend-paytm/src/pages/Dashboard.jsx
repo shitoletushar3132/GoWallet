@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Appbar from "../components/Appbar";
 import { Balance } from "../components/Balance";
 import { Users } from "../components/Users";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BaseURL } from "../constant/constant";
+import { FaHistory } from "react-icons/fa";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -38,8 +39,11 @@ const Dashboard = () => {
     <div>
       <Appbar />
       <div className="m-7 ">
-        <div className="flex flex-row-reverse underline pb-2">
+        <div className=" flex justify-between items-center underline pb-2">
           <Balance value={balance} />
+          <Link to={"/history"} className="cursor-pointer">
+            <FaHistory size={20} />
+          </Link>
         </div>
 
         <Users />

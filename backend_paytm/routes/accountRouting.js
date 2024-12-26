@@ -80,7 +80,9 @@ accountRouter.get("/history", authMiddleware, async (req, res) => {
   try {
     const userId = req.userId;
 
-    const hisData = await Transaction.find({ userBy: userId })
+    const transactions = await Transaction.find({
+      $or: [{ userBy: userId }, { receiverBy: userId }],
+    })
       .populate({
         path: "userBy",
         select: "-password",
@@ -90,12 +92,28 @@ accountRouter.get("/history", authMiddleware, async (req, res) => {
         select: "-password",
       });
 
+    // Process transactions to add "status"
+    const processedTransactions = transactions.map((transaction) => {
+      if (String(transaction.receiverBy._id) === userId) {
+        return {
+          ...transaction._doc,
+          status: "Received",
+        };
+      } else {
+        return {
+          ...transaction._doc,
+          status: "Paid",
+        };
+      }
+    });
+
     res.status(200).json({
-      message: "Successful fetch data",
-      data: { tansactions: hisData },
+      message: "Successfully fetched data",
+      data: { transactions: processedTransactions },
     });
   } catch (error) {
-    res.status(500).json({ message: "Something went Wrong....!" });
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong....!" });
   }
 });
 

@@ -1,1 +1,1 @@
-export const BaseURL = "https://gowalletapi.onrender.com";
+export const BaseURL = "http://localhost:3000";
